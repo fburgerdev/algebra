@@ -21,7 +21,7 @@ public class Num extends Expr {
 
     // transform
     @Override
-    public void transform(Callback callback) {
+    public void transform(ExprCallback callback) {
         // pass
     }
 
@@ -29,14 +29,6 @@ public class Num extends Expr {
     @Override
     public Expr copy() {
         return new Num(value);
-    }
-    // equals
-    @Override
-    public boolean equals(Expr other) {
-        if (other instanceof Num otherNum) {
-            return value == otherNum.value;
-        }
-        return false;
     }
     // compareTo
     @Override

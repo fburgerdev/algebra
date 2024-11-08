@@ -15,17 +15,16 @@ public class BFS {
         visited.add(initial);
         while (!queue.isEmpty()) {
             step();
-            System.out.println(visited.size());
         }
+        System.out.println("visited: " + visited.size());
         for (Expr expr : visited) {
             System.out.println(expr.debugStr());
         }
     }
 
-    public void step() {
+    public final void step() {
         Expr top = queue.pop().copy();
-        top.transform(() -> {
-            Expr transformed = top.copy();
+        top.transform(transformed -> {
             if (!visited.contains(transformed)) {
                 queue.push(transformed);
                 visited.add(transformed);

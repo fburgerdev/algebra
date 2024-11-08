@@ -22,32 +22,19 @@ public class Add extends Expr {
 
     // transform
     @Override
-    public void transform(Callback callback) {
+    public void transform(ExprCallback callback) {
         // commute
-        Expr temp = left;
-        left = right;
-        right = temp;
-        callback.call();
-        right = left;
-        left = temp;
+        callback.call(new Add(right, left));
 
         // children
-        left.transform(callback);
-        right.transform(callback);
+        left.transform(leftExpr -> callback.call(new Add(leftExpr, right)));
+        right.transform(rightExpr -> callback.call(new Add(left, rightExpr)));
     }
 
     // copy
     @Override
     public Expr copy() {
         return new Add(left.copy(), right.copy());
-    }
-    // equals
-    @Override
-    public boolean equals(Expr other) {
-        if (other instanceof Add otherAdd) {
-            return left.equals(otherAdd.left) && right.equals(otherAdd.right);
-        }
-        return false;
     }
     // compareTo
     @Override

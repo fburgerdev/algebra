@@ -9,10 +9,10 @@ public abstract class Expr implements Comparable<Expr> {
     }
 
     // transform
-    public abstract void transform(Callback callback);
+    public abstract void transform(ExprCallback callback);
     public int countTransforms() {
         transformCount = 0;
-        transform(() -> {
+        transform(expr -> {
             transformCount += 1;
         });
         return transformCount;
@@ -20,7 +20,6 @@ public abstract class Expr implements Comparable<Expr> {
     
     // copy, equals
     public abstract Expr copy();
-    public abstract boolean equals(Expr other);
     public int compareSubtypes(Expr other) {
         int thisScore = 0;
         if (this instanceof Num) {

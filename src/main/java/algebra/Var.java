@@ -21,7 +21,7 @@ public class Var extends Expr {
 
     // transform
     @Override
-    public void transform(Callback callback) {
+    public void transform(ExprCallback callback) {
         // pass
     }
 
@@ -29,14 +29,6 @@ public class Var extends Expr {
     @Override
     public Expr copy() {
         return new Var(name);
-    }
-    // equals
-    @Override
-    public boolean equals(Expr other) {
-        if (other instanceof Var otherVar) {
-            return name.equals(otherVar.name);
-        }
-        return false;
     }
     // compareTo
     @Override

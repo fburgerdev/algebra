@@ -5,7 +5,7 @@ public class Main {
         Expr expr = new Add(
             new Add(
                 new Var("x"),
-                new Var("y")
+                new Var("x")
             ),
             new Mul(
                 new Log(
@@ -20,7 +20,7 @@ public class Main {
         System.out.println("VarCount: " + expr.countVars());
         System.out.println("TransformCount: " + expr.countTransforms());
         System.out.println("Transforms:");
-        expr.transform(() -> System.out.println(expr.debugStr()));
+        expr.transform(x -> System.out.println(x.debugStr()));
 
         BFS bfs = new BFS(expr);
     }

@@ -21,22 +21,14 @@ public class Exp extends Expr {
 
     // transform
     @Override
-    public void transform(Callback callback) {
-        subexpr.transform(callback);
+    public void transform(ExprCallback callback) {
+        subexpr.transform(x -> callback.call(new Exp(x)));
     }
 
     // copy
     @Override
     public Expr copy() {
         return new Log(subexpr.copy());
-    }
-    // equals
-    @Override
-    public boolean equals(Expr other) {
-        if (other instanceof Exp otherExp) {
-            return subexpr.equals(otherExp.subexpr);
-        }
-        return false;
     }
     // compareTo
     @Override

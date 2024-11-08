@@ -21,22 +21,14 @@ public class Log extends Expr {
 
     // transform
     @Override
-    public void transform(Callback callback) {
-        subexpr.transform(callback);
+    public void transform(ExprCallback callback) {
+        subexpr.transform(x -> callback.call(new Log(x)));
     }
 
     // copy
     @Override
     public Expr copy() {
         return new Log(subexpr.copy());
-    }
-    // equals
-    @Override
-    public boolean equals(Expr other) {
-        if (other instanceof Log otherLog) {
-            return subexpr.equals(otherLog.subexpr);
-        }
-        return false;
     }
     // compareTo
     @Override

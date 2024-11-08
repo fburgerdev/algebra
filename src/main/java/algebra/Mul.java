@@ -22,32 +22,19 @@ public class Mul extends Expr {
 
     // transform
     @Override
-    public void transform(Callback callback) {
+    public void transform(ExprCallback callback) {
         // commute
-        Expr temp = left;
-        left = right;
-        right = temp;
-        callback.call();
-        right = left;
-        left = temp;
+        callback.call(new Mul(right, left));
 
         // children
-        left.transform(callback);
-        right.transform(callback);
+        left.transform(leftExpr -> callback.call(new Mul(leftExpr, right)));
+        right.transform(rightExpr -> callback.call(new Mul(left, rightExpr)));
     }
 
     // copy
     @Override
     public Expr copy() {
         return new Mul(left.copy(), right.copy());
-    }
-    // equals
-    @Override
-    public boolean equals(Expr other) {
-        if (other instanceof Mul otherMul) {
-            return left.equals(otherMul.left) && right.equals(otherMul.right);
-        }
-        return false;
     }
     // compareTo
     @Override
