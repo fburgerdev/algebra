@@ -1,4 +1,4 @@
-package calculator;
+package algebra;
 
 public class Fraction implements Expr {
     // upper, lower
@@ -13,6 +13,12 @@ public class Fraction implements Expr {
     // eval
     public Number eval(Number upper, Number lower) {
         return new Number(upper.value / lower.value);
+    }
+
+    // complexity
+    @Override
+    public double complexity() {
+        return 1.0 + upper.complexity() + lower.complexity();
     }
     // simplify
     @Override

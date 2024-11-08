@@ -1,4 +1,4 @@
-package calculator;
+package algebra;
 
 public class Negative implements Expr {
     // subexpr
@@ -11,6 +11,12 @@ public class Negative implements Expr {
     // eval
     public Number eval(Number subexpr) {
         return new Number(-subexpr.value);
+    }
+
+    // complexity
+    @Override
+    public double complexity() {
+        return 1.0 + subexpr.complexity();
     }
     // simplify
     @Override

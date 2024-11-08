@@ -1,4 +1,4 @@
-package calculator;
+package algebra;
 
 public class Number implements Expr {
     // value
@@ -7,6 +7,11 @@ public class Number implements Expr {
     // constructor
     public Number(double value) {
         this.value = value;
+    }
+    // complexity
+    @Override
+    public double complexity() {
+        return 0.0;
     }
     // simplify
     @Override

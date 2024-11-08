@@ -1,4 +1,4 @@
-package calculator;
+package algebra;
 
 public class Variable implements Expr {
     // name
@@ -7,6 +7,11 @@ public class Variable implements Expr {
     // constructor
     public Variable(String name) {
         this.name = name;
+    }
+    // complexity
+    @Override
+    public double complexity() {
+        return 0.001;
     }
     // simplify
     @Override

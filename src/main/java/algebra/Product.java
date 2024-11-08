@@ -1,4 +1,4 @@
-package calculator;
+package algebra;
 
 public class Product implements Expr {
     // left, right
@@ -14,6 +14,12 @@ public class Product implements Expr {
     public Number eval(Number left, Number right) {
         return new Number(left.value * right.value);
     }
+
+    // complexity
+    @Override
+    public double complexity() {
+        return 1.0 + left.complexity() + right.complexity();
+    }    
     // simplify
     @Override
     public Expr simplify() {

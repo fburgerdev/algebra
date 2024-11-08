@@ -1,4 +1,4 @@
-package calculator;
+package algebra;
 
 import java.util.ArrayList;
 import java.util.Arrays;
