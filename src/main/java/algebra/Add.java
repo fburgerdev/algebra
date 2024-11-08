@@ -26,6 +26,11 @@ public class Add extends Expr {
         // commute
         callback.call(new Add(right, left));
 
+        // promote
+        if (left.compareTo(right) == 0) {
+            callback.call(new Mul(new Num(2.0), right));
+        }
+
         // children
         left.transform(leftExpr -> callback.call(new Add(leftExpr, right)));
         right.transform(rightExpr -> callback.call(new Add(left, rightExpr)));
