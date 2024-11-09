@@ -56,6 +56,12 @@ public class Log extends Expr {
         }
     }
 
+    // str
+    @Override
+    public String str() {
+        return "log(" + subexpr.str() + ")";
+    }
+
     // debug
     @Override
     public String debugStr() {

@@ -13,6 +13,17 @@ public class Mul extends Expr {
     // complexity
     @Override
     public int countExprs() {
+        // division
+        if (right instanceof Exp exp) {
+            if (exp.subexpr instanceof Mul mul) {
+                if (mul.left instanceof Log log && mul.right instanceof Num num) {
+                    if (num.value == -1.0) {
+                        return 1 + left.countExprs() + log.subexpr.countExprs();
+                    }
+                }
+            }
+        }
+
         return 1 + left.countExprs() + right.countExprs();
     }
     @Override
@@ -96,6 +107,38 @@ public class Mul extends Expr {
         else {
             return compareSubtypes(other);
         }
+    }
+
+    // str
+    @Override
+    public String str() {
+        // division
+        if (right instanceof Exp exp) {
+            if (exp.subexpr instanceof Mul mul) {
+                if (mul.left instanceof Log log && mul.right instanceof Num num) {
+                    if (num.value == -1.0) {
+                        String leftStr = left.str();
+                        if (left instanceof Add) {
+                            leftStr = "(" + leftStr + ")";
+                        }
+                        String rightStr = log.subexpr.str();
+                        if (log.subexpr instanceof Add) {
+                            rightStr = "(" + rightStr + ")";
+                        }
+                        return leftStr + "/" + rightStr;
+                    }
+                }
+            }
+        }
+        String leftStr = left.str();
+        if (left instanceof Add) {
+            leftStr = "(" + leftStr + ")";
+        }
+        String rightStr = right.str();
+        if (right instanceof Add) {
+            rightStr = "(" + rightStr + ")";
+        }
+        return leftStr + "*" + rightStr;
     }
 
     // debug

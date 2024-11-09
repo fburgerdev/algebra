@@ -47,6 +47,17 @@ public class Num extends Expr {
         }
     }
 
+    // str
+    @Override
+    public String str() {
+        if (value % 1.0 == 0) {
+            return String.format("%.0f", value);  
+        }
+        else {
+            return String.format("%s", value);
+        }
+    }
+
     // debug
     @Override
     public String debugStr() {

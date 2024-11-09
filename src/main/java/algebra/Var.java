@@ -47,6 +47,12 @@ public class Var extends Expr {
         }
     }
 
+    // str
+    @Override
+    public String str() {
+        return name;
+    }
+
     // debug
     @Override
     public String debugStr() {

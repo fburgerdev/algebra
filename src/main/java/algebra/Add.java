@@ -13,6 +13,14 @@ public class Add extends Expr {
     // complexity
     @Override
     public int countExprs() {
+        // subtraction
+        if (right instanceof Mul mul) {
+            if (mul.left instanceof Num num) {
+                if (num.value == -1.0) {
+                    return 1 + left.countExprs() + mul.right.countExprs();
+                }
+            }
+        }
         return 1 + left.countExprs() + right.countExprs();
     }
     @Override
@@ -113,6 +121,20 @@ public class Add extends Expr {
         else {
             return compareSubtypes(other);
         }
+    }
+
+    // str
+    @Override
+    public String str() {
+        // subtraction
+        if (right instanceof Mul mul) {
+            if (mul.left instanceof Num num) {
+                if (num.value == -1.0) {
+                    return left.str() + "-" + mul.right.str();
+                }
+            }
+        }
+        return left.str() + "+" + right.str();
     }
 
     // debug

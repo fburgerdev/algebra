@@ -56,6 +56,22 @@ public class Exp extends Expr {
         }
     }
 
+    // str
+    @Override
+    public String str() {
+        // base
+        if (subexpr instanceof Mul mul) {
+            if (mul.left instanceof Log log) {
+                String rightStr = mul.right.str();
+                if (mul.right instanceof Add || mul.right instanceof Mul) {
+                    rightStr = "(" + rightStr + ")";
+                }
+                return log.subexpr.str() + "^" + rightStr;
+            }
+        }
+        return "exp(" + subexpr.str() + ")";
+    }
+
     // debug
     @Override
     public String debugStr() {

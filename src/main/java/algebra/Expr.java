@@ -66,6 +66,9 @@ public abstract class Expr implements Comparable<Expr> {
         return Integer.compare(thisScore, otherScore);
     }
 
+    // str
+    public abstract String str();
+
     // debug
     public abstract String debugStr();
 
