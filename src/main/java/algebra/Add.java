@@ -20,15 +20,72 @@ public class Add extends Expr {
         return left.countVars() + right.countVars();
     }
 
+    // simplify
+    @Override
+    public Expr simplify() {
+        Expr simpleLeft = left.simplify();
+        Expr simpleRight = right.simplify();
+        if (simpleLeft instanceof Num leftNum && simpleRight instanceof Num rightNum) {
+            return new Num(leftNum.value + rightNum.value);
+        }
+        else if (simpleLeft instanceof Num leftNum && leftNum.value == 0.0) {
+            return simpleRight;
+        }
+        else if (simpleRight instanceof Num rightNum && rightNum.value == 0.0) {
+            return simpleLeft;
+        }
+        return new Add(simpleLeft, simpleRight);
+    }
+
     // transform
     @Override
     public void transform(ExprCallback callback) {
         // commute
         callback.call(new Add(right, left));
 
+        // associate
+        if (left instanceof Add leftAdd) {
+            if (right instanceof Add rightAdd) {
+                callback.call(new Add(new Add(leftAdd.left, rightAdd.left), new Add(leftAdd.right, rightAdd.right)));
+                callback.call(new Add(new Add(leftAdd.left, rightAdd.right), new Add(rightAdd.left, leftAdd.right)));
+                callback.call(new Add(new Add(rightAdd.left, leftAdd.right), new Add(leftAdd.left, rightAdd.right)));
+                callback.call(new Add(new Add(rightAdd.right, leftAdd.right), new Add(rightAdd.left, leftAdd.left)));
+            }
+            else {
+                callback.call(new Add(new Add(leftAdd.left, right), leftAdd.right));
+                callback.call(new Add(new Add(right, leftAdd.right), leftAdd.left));
+            }
+        }
+        else if (right instanceof Add rightAdd){
+            callback.call(new Add(rightAdd.right, new Add(rightAdd.left, left)));
+            callback.call(new Add(rightAdd.left, new Add(left, rightAdd.right)));
+        }
+
         // promote
         if (left.compareTo(right) == 0) {
             callback.call(new Mul(new Num(2.0), right));
+        }
+        else if (left instanceof Mul leftMul) {
+            if (leftMul.left.compareTo(right) == 0) {
+                callback.call(new Mul(new Add(leftMul.right, new Num(1.0)), right));
+            }
+            else if (leftMul.right.compareTo(right) == 0) {
+                callback.call(new Mul(new Add(leftMul.left, new Num(1.0)), right));
+            }
+            else if (right instanceof Mul rightMul) {
+                if (leftMul.left.compareTo(rightMul.left) == 0) {
+                    callback.call(new Mul(new Add(leftMul.right, rightMul.right), leftMul.left));
+                }
+                else if (leftMul.left.compareTo(rightMul.right) == 0) {
+                    callback.call(new Mul(new Add(leftMul.right, rightMul.left), leftMul.left));
+                }
+                else if (leftMul.right.compareTo(rightMul.left) == 0) {
+                    callback.call(new Mul(new Add(leftMul.left, rightMul.right), leftMul.right));
+                }
+                else if (leftMul.right.compareTo(rightMul.right) == 0) {
+                    callback.call(new Mul(new Add(leftMul.left, rightMul.left), leftMul.right));
+                }
+            }
         }
 
         // children

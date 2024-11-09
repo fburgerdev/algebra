@@ -19,6 +19,12 @@ public class Num extends Expr {
         return 0;
     }
 
+    // simplify
+    @Override
+    public Expr simplify() {
+        return new Num(value);
+    }
+
     // transform
     @Override
     public void transform(ExprCallback callback) {

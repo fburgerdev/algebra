@@ -8,6 +8,9 @@ public abstract class Expr implements Comparable<Expr> {
         return countExprs() * 1024 + countVars();
     }
 
+    // simplify
+    public abstract Expr simplify();
+    
     // transform
     public abstract void transform(ExprCallback callback);
     public int countTransforms() {

@@ -19,6 +19,12 @@ public class Var extends Expr {
         return 1;
     }
 
+    // simplify
+    @Override
+    public Expr simplify() {
+        return new Var(name);
+    }
+
     // transform
     @Override
     public void transform(ExprCallback callback) {

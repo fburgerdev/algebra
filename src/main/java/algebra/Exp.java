@@ -19,6 +19,21 @@ public class Exp extends Expr {
         return subexpr.countVars();
     }
 
+    // simplify
+    @Override
+    public Expr simplify() {
+        Expr simplified = subexpr.simplify();
+        if (simplified instanceof Num num) {
+            if (num.value == 0.0) {
+                return new Num(1.0);
+            }
+        }
+        else if (simplified instanceof Log log) {
+            return log.subexpr;
+        }
+        return new Exp(simplified);
+    }
+
     // transform
     @Override
     public void transform(ExprCallback callback) {
