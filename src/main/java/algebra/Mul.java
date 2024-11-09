@@ -125,7 +125,7 @@ public class Mul extends Expr {
                         if (log.subexpr instanceof Add) {
                             rightStr = "(" + rightStr + ")";
                         }
-                        return leftStr + "/" + rightStr;
+                        return leftStr + " / " + rightStr;
                     }
                 }
             }
@@ -138,7 +138,7 @@ public class Mul extends Expr {
         if (right instanceof Add) {
             rightStr = "(" + rightStr + ")";
         }
-        return leftStr + "*" + rightStr;
+        return leftStr + " * " + rightStr;
     }
 
     // debug

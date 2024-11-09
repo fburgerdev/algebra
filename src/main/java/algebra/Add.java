@@ -130,11 +130,11 @@ public class Add extends Expr {
         if (right instanceof Mul mul) {
             if (mul.left instanceof Num num) {
                 if (num.value == -1.0) {
-                    return left.str() + "-" + mul.right.str();
+                    return left.str() + " - " + mul.right.str();
                 }
             }
         }
-        return left.str() + "+" + right.str();
+        return left.str() + " + " + right.str();
     }
 
     // debug

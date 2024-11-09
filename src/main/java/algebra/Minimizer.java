@@ -18,7 +18,7 @@ public class Minimizer {
         while (!queue.isEmpty()) {
             step();
         }
-        System.out.println("visited: " + visited.size());
+        // System.out.println("visited: " + visited.size());
     }
 
     // step

@@ -131,9 +131,7 @@ public class Parser {
     }
     // parse
     public static Expr parse(String string) {
-        System.out.println(tokenize(string));
         List<Object> list = parse(new ArrayList<>(tokenize(string)));
-        System.out.println(list);
         if (list.size() == 1) {
             return (Expr)list.get(0);
         }
