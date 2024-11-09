@@ -4,15 +4,16 @@ public class Main {
     public static void main(String[] args) {
         Expr expr = new Add(
             new Add(
-                new Var("x"),
-                new Var("x")
-            ),
-            new Mul(
-                new Log(
-                    new Num(3.0)
+                new Add(
+                    new Add(
+                        new Var("x"),
+                        new Num(1.0)
+                    ),
+                    new Var("x")
                 ),
-                new Var("x")
-            )
+                new Num(1.0)
+            ),
+            new Var("x")
         );
         System.out.println(expr.debugStr());
         System.out.println("Complexity: " + expr.complexity());
@@ -20,8 +21,8 @@ public class Main {
         System.out.println("VarCount: " + expr.countVars());
         System.out.println("TransformCount: " + expr.countTransforms());
         System.out.println("Transforms:");
-        expr.transform(x -> System.out.println(x.debugStr()));
-
-        BFS bfs = new BFS(expr);
+        
+        Expr minimum = new Minimizer(expr).findMinimum();
+        System.out.println("Minimum: " + minimum.debugStr());
     }
 }
