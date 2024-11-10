@@ -18,13 +18,11 @@ public class Var extends Expr {
     public int countVars() {
         return 1;
     }
-
     // simplify
     @Override
     public Expr simplify() {
         return new Var(name);
     }
-
     // transform
     @Override
     public void transform(ExprCallback callback) {
@@ -52,8 +50,7 @@ public class Var extends Expr {
     public String str() {
         return name;
     }
-
-    // debug
+    // debugStr
     @Override
     public String debugStr() {
         return name;

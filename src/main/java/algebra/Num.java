@@ -18,13 +18,11 @@ public class Num extends Expr {
     public int countVars() {
         return 0;
     }
-
     // simplify
     @Override
     public Expr simplify() {
         return new Num(value);
     }
-
     // transform
     @Override
     public void transform(ExprCallback callback) {
@@ -57,8 +55,7 @@ public class Num extends Expr {
             return String.format("%s", value);
         }
     }
-
-    // debug
+    // debugStr
     @Override
     public String debugStr() {
         return String.valueOf(value);

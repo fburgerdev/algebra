@@ -18,7 +18,6 @@ public class Log extends Expr {
     public int countVars() {
         return subexpr.countVars();
     }
-
     // simplify
     @Override
     public Expr simplify() {
@@ -33,7 +32,6 @@ public class Log extends Expr {
         }
         return new Log(simplified);
     }
-
     // transform
     @Override
     public void transform(ExprCallback callback) {
@@ -61,8 +59,7 @@ public class Log extends Expr {
     public String str() {
         return "log(" + subexpr.str() + ")";
     }
-
-    // debug
+    // debugStr
     @Override
     public String debugStr() {
         return "LOG(" + subexpr.debugStr() + ")";

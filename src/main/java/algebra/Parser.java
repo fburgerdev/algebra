@@ -1,49 +1,24 @@
 package algebra;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Parser {
-    public static boolean isNumeric(String str) { 
+    // isNumeric
+    private static boolean isNumeric(String str) { 
         try {  
-            Double.parseDouble(str);
+            Double.valueOf(str);
             return true;
         }
-        catch(Exception e) {  
+        catch(NumberFormatException e) {  
             return false;  
         }
-    }  
-    
-    public static ArrayList<String> split(String source, String delimiters) {
-        ArrayList<String> out = new ArrayList<>();
-        String current = new String();
-        int level = 0;
-        for (char ch : source.toCharArray()) {
-            if (ch == '(') {
-                ++level;
-            }
-            if (level == 0 && delimiters.indexOf(ch) >= 0) {
-                if (!current.isEmpty()) {
-                    out.add(current);
-                    current = new String();
-                }
-                out.add(String.valueOf(ch));
-            }
-            else {
-                current += ch;
-            }
-            if (ch == ')') {
-                --level;
-            }
-        }
-        if (!current.isEmpty()) {
-            out.add(current);
-        }
-        return out;
-    } 
-    public static List<String> tokenize(String source) {
+    }
+
+    // tokenize
+    private static List<String> tokenize(String source) {
         source = source.replaceAll(" ", "");
+        source = source.replaceAll("\\^", ";\\^;");
         source = source.replaceAll("\\+", ";\\+;");
         source = source.replaceAll("\\-", ";\\-;");
         source = source.replaceAll("\\*", ";\\*;");
@@ -54,8 +29,37 @@ public class Parser {
         list.removeIf(str -> str.isBlank());
         return list;
     }
-    public static void removeBrackets(List<Object> list) {
+    // removeBrackets
+    private static void removeBrackets(List<Object> list) {
         for (int i = 0; i < list.size(); i++) {
+            if (i + 3 < list.size()) {
+                Object left = list.get(i + 0);
+                Object right = list.get(i + 2);
+                if (left instanceof String leftString && right instanceof Expr rightExpr) {
+                    if (list.get(i + 1) instanceof String openBracket && openBracket.equals("(")) {
+                        if (list.get(i + 3) instanceof String closeBracket && closeBracket.equals(")")) {
+                            if (leftString.equals("exp")) {
+                                list.remove(i);
+                                list.remove(i);
+                                list.remove(i);
+                                list.remove(i);
+                                list.add(i, new Exp(rightExpr));
+                                removeBrackets(list);
+                                return;
+                            }
+                            else if (leftString.equals("log")) {
+                                list.remove(i);
+                                list.remove(i);
+                                list.remove(i);
+                                list.remove(i);
+                                list.add(i, new Log(rightExpr));
+                                removeBrackets(list);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
             if (i + 2 < list.size()) {
                 Object left = list.get(i + 0);
                 Object middle = list.get(i + 1);
@@ -75,7 +79,8 @@ public class Parser {
             }
         }   
     }
-    public static void parseBinary(List<Object> list, String operator) {
+    // parseBinary
+    private static void parseBinary(List<Object> list, String operator) {
         for (int i = 0; i < list.size(); i++) {
             if (i + 2 < list.size()) {
                 Object left = list.get(i + 0);
@@ -92,6 +97,7 @@ public class Parser {
                                 case "-" -> list.add(i, new Add(leftExpr, new Mul(new Num(-1.0), rightExpr)));
                                 case "*" -> list.add(i, new Mul(leftExpr, rightExpr));
                                 case "/" -> list.add(i, new Mul(leftExpr, new Exp(new Mul(new Log(rightExpr), new Num(-1.0)))));
+                                case "^" -> list.add(i, new Exp(new Mul(new Log(leftExpr), rightExpr)));
                                 default -> {
                                 }
                             }
@@ -103,7 +109,10 @@ public class Parser {
             }
         }
     }
-    public static List<Object> parse(List<Object> list) {
+    
+    // parse
+    public static Expr parse(String string) {
+        List<Object> list = new ArrayList<>(tokenize(string));
         for (int i = 0; i < list.size(); i++) {
             Object obj = list.get(i);
             if (obj instanceof String str) {
@@ -113,7 +122,9 @@ public class Parser {
                 }
                 // Variable
                 else if ((str.chars()).allMatch(Character::isAlphabetic)) {
-                    list.set(i, new Var(str));
+                    if (!str.equals("exp") && !str.equals("log")) {
+                        list.set(i, new Var(str));
+                    }
                 }
             }
         }
@@ -122,16 +133,12 @@ public class Parser {
                 break;
             }
             removeBrackets(list);
+            parseBinary(list, "^");
             parseBinary(list, "*");
             parseBinary(list, "/");
             parseBinary(list, "+");
             parseBinary(list, "-");
         }
-        return list;
-    }
-    // parse
-    public static Expr parse(String string) {
-        List<Object> list = parse(new ArrayList<>(tokenize(string)));
         if (list.size() == 1) {
             return (Expr)list.get(0);
         }

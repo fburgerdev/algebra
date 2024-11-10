@@ -30,7 +30,6 @@ public class Mul extends Expr {
     public int countVars() {
         return left.countVars() + right.countVars();
     }
-
     // simplify
     @Override
     public Expr simplify() {
@@ -57,7 +56,6 @@ public class Mul extends Expr {
         }
         return new Mul(simpleLeft, simpleRight);
     }
-
     // transform
     @Override
     public void transform(ExprCallback callback) {
@@ -77,9 +75,20 @@ public class Mul extends Expr {
                 callback.call(new Mul(new Mul(right, leftMul.right), leftMul.left));
             }
         }
-        else if (right instanceof Mul rightMul){
-            callback.call(new Mul(rightMul.right, new Mul(rightMul.left, left)));
-            callback.call(new Mul(rightMul.left, new Mul(left, rightMul.right)));
+
+        // promote
+        if (left.compareTo(right) == 0) {
+            callback.call(new Exp(new Mul(new Log(right), new Num(2.0))));
+        }
+        else if (left instanceof Exp leftExp && leftExp.subexpr instanceof Mul leftMul && leftMul.left instanceof Log leftLog) {
+            if (leftLog.subexpr.compareTo(right) == 0) {
+                callback.call(new Exp(new Mul(leftLog, new Mul(leftMul.right, new Num(1.0)))));
+            }
+            else if (right instanceof Exp rightExp && rightExp.subexpr instanceof Mul rightMul && rightMul.left instanceof Log rightLog) {
+                if (leftLog.subexpr.compareTo(rightLog.subexpr) == 0) {
+                    callback.call(new Exp(new Mul(leftLog, new Mul(leftMul.right, rightMul.right))));
+                }
+            }
         }
 
         // children
@@ -125,7 +134,7 @@ public class Mul extends Expr {
                         if (log.subexpr instanceof Add) {
                             rightStr = "(" + rightStr + ")";
                         }
-                        return leftStr + " / " + rightStr;
+                        return leftStr + "/" + rightStr;
                     }
                 }
             }
@@ -138,10 +147,9 @@ public class Mul extends Expr {
         if (right instanceof Add) {
             rightStr = "(" + rightStr + ")";
         }
-        return leftStr + " * " + rightStr;
+        return leftStr + "*" + rightStr;
     }
-
-    // debug
+    // debugStr
     @Override
     public String debugStr() {
         return "MUL(" + left.debugStr() + "," + right.debugStr() + ")";

@@ -1,5 +1,4 @@
 package algebra;
-
 import java.util.ArrayDeque;
 import java.util.TreeSet;
 
@@ -19,6 +18,9 @@ public class Minimizer {
             step();
         }
         // System.out.println("visited: " + visited.size());
+        // for (Expr expr : visited) {
+        //     System.out.println(expr.debugStr());
+        // }
     }
 
     // step

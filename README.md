@@ -71,6 +71,7 @@ and so on.
 
 I decided to include the following transformations to my algorithm:
 - `x + y` = `y + x` and `x * y` = `y * x` (commutativity)
+- `(x + y) + z` = `x + (y + z)` and `(x * y) * z` = `x * (y * z)` (associativity)
 - `x + x` = `2 * x`, `a * x + x` = `(a + 1) * x` and `a * x + b * x` = `(a + b) * x` (promotion)
 - `x + 0` = `x`, `x * 1` = `x` (neutralize) !transform only from left to right
 - `exp(log(x))` = `x`, `log(exp(x))` = `x` (cancel) !transform only from left to right

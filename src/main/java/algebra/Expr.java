@@ -7,22 +7,12 @@ public abstract class Expr implements Comparable<Expr> {
     public int complexity() {
         return countExprs() * 1024 + countVars();
     }
-
     // simplify
     public abstract Expr simplify();
-    
     // transform
     public abstract void transform(ExprCallback callback);
-    public int countTransforms() {
-        transformCount = 0;
-        transform(expr -> {
-            transformCount += 1;
-        });
-        return transformCount;
-    }
     
-    // copy, equals
-    public abstract Expr copy();
+    // compare, copy
     public int compareSubtypes(Expr other) {
         int thisScore = 0;
         if (this instanceof Num) {
@@ -65,12 +55,9 @@ public abstract class Expr implements Comparable<Expr> {
 
         return Integer.compare(thisScore, otherScore);
     }
+    public abstract Expr copy();
 
-    // str
+    // str, debugStr
     public abstract String str();
-
-    // debug
     public abstract String debugStr();
-
-    private int transformCount = 0;
 }
